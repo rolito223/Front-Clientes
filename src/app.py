@@ -1,11 +1,14 @@
-"""Esta aplicacion es el front end de la api Clientes
-Pretende ser un CRUD multiplataforma de clientes
-"""
 import flet as ft
+import logging
+
+from utils.create import TabContentCreate
+# from utils.icons import TabContentIcon
+
+logger = logging.log(logging.DEBUG, "/logs/mainmenu.log")
 
 
-def main(page: ft.Page) -> None:
-    """Funcion principal de la aplicacion
+def main(page: ft.Page):
+    """Menu main de la aplicacion
     Los campos que manejan los endpoints son:
     {
         "id": 0,
@@ -25,117 +28,79 @@ def main(page: ft.Page) -> None:
     [PUT]/api/Clientes/{id} Actualiza un cliente
     [DELETE]/api/Clientes/{id} Elimina un cliente
     """
-    page.title = "Clientes"
-    page.description = "CRUD de clientes"
-    page.language = "es"
-    page.author = "Raul Andres Orlando"
-    page.keywords = "CRUD, clientes, api"
+    logging.info("Iniciando mainmenu.py")
 
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    # Encabezado de la aplicacion
 
-    def button_clicked(e):
-        t.value = f"""Textboxes values are:  
-                    '{tb_name.value}'
-                    '{tb_lastName.value}'
-                    '{tb_address.value}'
-                    '{tb_city.value}'
-                    '{tb_zipcode.value}'
-                    '{tb_dni.value}'
-                    '{tb_phone.value}'
-                    '{tb_email.value}'
-                """
+    page.title = "CRUD Clientes"
+    page.theme_mode = "dark"
+    page.vertical_alignment = "start"
+    page.horizontal_alignment = "center"
+    page.window_width = 800
+    page.window_height = 1000
+
+    def change_theme(e):
+        """
+        Summary:
+            Cambia el tema de la aplicacion
+        Args:
+            e (ControlEvent): evento de control
+        """
+        page.theme_mode = "light" if page.theme_mode == "dark" else "dark"
+        theme_icon_button.selected = not theme_icon_button.selected
         page.update()
 
-    t = ft.Text()
+    # Inicio del renderizado de la aplicacion
 
-    tb_id = ft.TextField(
-        label="ID",
-        value="0"
+    theme_icon_button = ft.IconButton(
+        ft.icons.DARK_MODE,
+        selected=False,
+        selected_icon=ft.icons.LIGHT_MODE,
+        icon_size=35,
+        tooltip="change theme",
+        on_click=change_theme,
+        style=ft.ButtonStyle(
+            color={"": ft.colors.BLACK, "selected": ft.colors.WHITE}, ),
     )
 
-    tb_name = ft.TextField(
-        label="Nombre",
-        value="",
-        capitalization=ft.TextCapitalization.WORDS,
-        keyboard_type=ft.KeyboardType.NAME,
-        hint_text="Ingrese su nombre",
+    create = TabContentCreate()
+
+    tabs = ft.Tabs(
+        expand=True,
+        scrollable=True,
+        selected_index=0,
+        tabs=[
+            ft.Tab(
+                text="",
+                content=create,
+                icon=ft.icons.SEARCH_OUTLINED
+            ),
+            ft.Tab(
+                text="Alta",
+                content=create,
+                icon=ft.icons.CREATE_OUTLINED
+            ),
+            ft.Tab(
+                text="Actualizar",
+                content=create,
+                icon=ft.icons.UPDATE_OUTLINED
+            ),
+            ft.Tab(
+                text="Eliminar",
+                content=create,
+                icon=ft.icons.DELETE_FOREVER_OUTLINED
+            )
+        ]
     )
 
-    tb_lastName = ft.TextField(
-        label="Read-only",
-        read_only=True,
-        value="Last name"
-    )
+    page.add(tabs)
 
-    tb_address = ft.TextField(
-        label="With placeholder",
-        hint_text="Please enter text here"
-    )
-
-    tb_city = ft.TextField(
-        label="With an icon",
-        icon=ft.icons.EMOJI_EMOTIONS
-    )
-
-    tb_zipcode = ft.TextField(
-        label="With an icon",
-        icon=ft.icons.EMOJI_EMOTIONS
-    )
-
-    tb_dni = ft.TextField(
-        label="Nombre",
-        value="",
-        capitalization=ft.TextCapitalization.WORDS
-    )
-
-    tb_phone = ft.TextField(
-        label="Nombre",
-        value="",
-        capitalization=ft.TextCapitalization.WORDS
-    )
-
-    tb_email = ft.TextField(
-        label="Nombre",
-        value="",
-        capitalization=ft.TextCapitalization.WORDS
-    )
-
-    b = ft.ElevatedButton(
-        text="Submit",
-        on_click=button_clicked
-    )
-
-    ft.ResponsiveRow([
-        ft.Column(
-            col={"sm": 12, "md": 6, "lg": 4, "xl": 3},
-            controls=[
-                ft.Text("Column 1"),
-                t,
-                tb_id,
-                tb_name,
-                tb_lastName,
-                tb_address,
-                tb_city,
-                tb_zipcode,
-                tb_dni,
-                tb_phone,
-                tb_email,
-                b
-            ]),
-    ], alignment=ft.MainAxisAlignment.CENTER)
-
-    page.add(
-        tb_name,
-        tb_lastName,
-        tb_address,
-        tb_city,
-        tb_zipcode,
-        tb_dni,
-        tb_phone,
-        tb_email,
-        b,
-        t,
-    )
+    page.update()
 
 
-ft.app(target=main, port=5000, view=ft.WEB_BROWSER)
+ft.app(
+    target=main,
+    route_url_strategy="path",
+    view=ft.WEB_BROWSER,
+    assets_dir="assets"
+)
