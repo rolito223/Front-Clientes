@@ -1,5 +1,5 @@
 import json
-from utils.models import Cliente
+from utils.api_cliente import Cliente
 
 if __name__ == '__main__':
     print('Iniciando testeo de la clase Cliente')
