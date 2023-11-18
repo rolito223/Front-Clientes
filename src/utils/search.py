@@ -1,13 +1,20 @@
 from flet import *
 import flet as ft
 import json
-
+import logging
+from datetime import datetime
 from utils.models import Cliente
 
 
 class TabContentSearch(ft.UserControl):
     def __init__(self):
         super().__init__()
+        logging.basicConfig(
+            format='%(levelname)s:%(message)s',
+            filename=f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log',
+            filemode='w',
+            level=logging.INFO
+        )
         self.title = "Crear Clientes"
         self.description = "CRUD de clientes"
         self.language = "es"
@@ -75,7 +82,8 @@ class TabContentSearch(ft.UserControl):
             capitalization=ft.TextCapitalization.NONE,
             keyboard_type=ft.KeyboardType.NUMBER,
             bgcolor='#1a1c1e',
-            read_only=True
+            read_only=True,
+            on_change=self.blank_error
         )
 
         self.tb_phone = ft.TextField(
@@ -83,7 +91,8 @@ class TabContentSearch(ft.UserControl):
             capitalization=ft.TextCapitalization.NONE,
             keyboard_type=ft.KeyboardType.PHONE,
             bgcolor='#1a1c1e',
-            read_only=True
+            read_only=True,
+            on_change=self.blank_error
         )
 
         self.tb_email = ft.TextField(
@@ -91,7 +100,8 @@ class TabContentSearch(ft.UserControl):
             value="",
             keyboard_type=ft.KeyboardType.EMAIL,
             bgcolor='#1a1c1e',
-            read_only=True
+            read_only=True,
+            on_change=self.blank_error
         )
 
         self.button_search = ft.ElevatedButton(
@@ -157,10 +167,9 @@ class TabContentSearch(ft.UserControl):
                         color=ft.colors.BLACK
                     )
                 ],
-                disabled=True,
                 alignment=ft.MainAxisAlignment.SPACE_AROUND,
             ),
-
+            disabled=True,
             bgcolor=ft.colors.YELLOW_400,
             style=ft.ButtonStyle(
                 side={
@@ -173,23 +182,17 @@ class TabContentSearch(ft.UserControl):
             on_click=self.button_clicked
         )
 
+        self.button_restart_fields = ft.FloatingActionButton(
+            icon=ft.icons.RESET_TV_OUTLINED,
+            on_click=self.action_button_restart_fields,
+            bgcolor=ft.colors.RED_500,
+            disabled=True
+        )
+
     def build(self):
         fields = ft.Column(
             controls=[
                 ft.Divider(height=10, color='#212121'),
-                ft.Row(
-                    controls=[ft.Text(
-                        "INGRESE LOS DATOS DEL CLIENTE",
-                        font_family="ARIAL",
-                        style=ft.TextThemeStyle.TITLE_LARGE,
-                        color=ft.colors.WHITE,
-                        max_lines=3,
-                        overflow=ft.TextOverflow.ELLIPSIS,
-                        text_align=ft.TextAlign.CENTER
-                    )],
-                    alignment=ft.MainAxisAlignment.SPACE_EVENLY,
-                    wrap=True
-                ),
                 ft.Row(
                     controls=[
                         self.textbox_row,
@@ -213,7 +216,8 @@ class TabContentSearch(ft.UserControl):
                     controls=[
                         self.button_search,
                         self.button_update,
-                        self.button_delete
+                        self.button_delete,
+                        self.button_restart_fields
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                     vertical_alignment=ft.CrossAxisAlignment.CENTER
@@ -235,9 +239,60 @@ class TabContentSearch(ft.UserControl):
         return (
             ft.ResponsiveRow(
                 [self.contenedor],
-                alignment=ft.MainAxisAlignment.CENTER
+                alignment=ft.MainAxisAlignment.CENTER,
+                vertical_alignment=ft.CrossAxisAlignment.CENTER
             )
         )
+
+    def blank_error(self, e):
+        # Reseteal el campo de ayuda
+        e.control.counter_text = ""
+        e.control.counter_style = None
+        e.control.update()
+
+    def is_blank(self):
+        # Chequea si hay campos vacios
+        if self.tb_address.value == "" or self.tb_city.value == "" or self.tb_dni.value == "" or self.tb_email.value == "" or self.tb_lastName.value == "" or self.tb_name.value == "" or self.tb_phone.value == "" or self.tb_zipcode.value == "":
+            return True
+
+    def check_email(self, email: str):
+        # Chequea si el email es valido
+        if len(email) < 8 or email.find("@") == -1 or email.find(".") == -1:
+            return True
+
+        mail = email.split('@')
+        if len(mail) != 2:
+            return True
+
+        if len(mail[0]) < 1 or len(mail[1]) < 4:
+            return True
+
+        if mail[1].find('.') == -1:
+            return True
+
+        doms = mail[1].split('.')
+        if len(doms) < 2:
+            return True
+
+        return False
+
+    def validate_phone(self, phone: str):
+        """
+        Valida el formato correcto de un numero de telefono
+        Maximo 12 digitos - Minimo 10 digitos
+        Debe contener solo numeros
+        """
+
+        if (len(phone) >= 10) and (len(phone) <= 13) and (phone.isnumeric()):
+            return False
+        else:
+            return True
+
+    def action_button_restart_fields(self, e: ft.ControlEvent = None):
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        logging.info(f'{date} - Boton presionado: Reiniciar campos')
+        self.restart_fields()
+        self.update()
 
     def restart_fields(self):
         self.tb_id.value = ""
@@ -262,33 +317,75 @@ class TabContentSearch(ft.UserControl):
 
     def button_clicked(self, e: ft.ControlEvent):
         cliente = Cliente()
+        date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        logging.info(f'ID: {self.tb_id.value}')
+
         if e.control == self.button_delete:
+            logging.info(f'{date} - Boton presionado: Eliminar')
             if cliente.delete(self.tb_id.value) == 200:
-                print(e, "Cliente eliminado correctamente")
+                logging.info(f'{date} - Cliente eliminado correctamente')
                 self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} ha sido eliminado con exito"""
                 self.restart_fields()
             else:
+                logging.info(f'{date} - Cliente NO pudo ser eliminado')
                 self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} NO PUDO SER ELIMINADO"""
 
         elif e.control == self.button_update:
-            self.data = json.dumps({
-                "id": int(self.tb_id.value),
-                "name": self.tb_name.value,
-                "lastName": self.tb_lastName.value,
-                "address": self.tb_address.value,
-                "city": self.tb_city.value,
-                "zipCode": self.tb_zipcode.value,
-                "dni": int(self.tb_dni.value),
-                "phone": self.tb_phone.value,
-                "email": self.tb_email.value
-            })
-            if cliente.update(self.tb_id.value, self.data) == 200:
-                self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} ha sido actualizado con exito"""
-                self.restart_fields()
+            logging.info(f'{date} - Boton presionado: Actualizar')
+            if self.is_blank():
+                self.textbox_row.value = "No puede haber campos vacios"
+                self.textbox_row.color = ft.colors.RED
+
             else:
-                self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} NO PUDO SER ACTUALIZADO"""
+                if self.check_email(self.tb_email.value):
+                    self.textbox_row.value = "El email no es valido"
+                    self.textbox_row.color = ft.colors.RED
+                    self.tb_email.counter_text = "Ingrese un email valido"
+                    self.tb_email.counter_style = ft.TextStyle(
+                        color=ft.colors.RED)
+
+                elif self.tb_dni.value.isnumeric() == False:
+                    self.textbox_row.value = "El DNI debe ser un numero"
+                    self.textbox_row.color = ft.colors.RED
+                    self.tb_dni.counter_text = "Ingrese un DNI valido"
+                    self.tb_dni.counter_style = ft.TextStyle(
+                        color=ft.colors.RED)
+
+                elif self.validate_phone(self.tb_phone.value):
+                    self.textbox_row.value = "El numero de telefono NO es valido"
+                    self.textbox_row.color = ft.colors.RED
+                    self.tb_phone.counter_text = "Ingrese un numero de telefono valido"
+                    self.tb_phone.counter_style = ft.TextStyle(
+                        color=ft.colors.RED)
+
+                else:
+                    self.data = json.dumps({
+                        "id": int(self.tb_id.value),
+                        "name": self.tb_name.value,
+                        "lastName": self.tb_lastName.value,
+                        "address": self.tb_address.value,
+                        "city": self.tb_city.value,
+                        "zipCode": self.tb_zipcode.value,
+                        "dni": int(self.tb_dni.value),
+                        "phone": self.tb_phone.value,
+                        "email": self.tb_email.value
+                    })
+                    logging.info(f'{date} - Datos a actualizar: {self.data}')
+
+                    if cliente.update(self.tb_id.value, self.data) == 200:
+                        logging.info(
+                            f'{date} - Cliente actualizado correctamente\n{self.data}'
+                        )
+                        self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} ha sido actualizado con exito"""
+                        self.restart_fields()
+                    else:
+                        logging.info(
+                            f'{date} - Cliente NO pudo ser actualizado'
+                        )
+                        self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} NO PUDO SER ACTUALIZADO"""
 
         else:
+            logging.info(f'{date} - Boton presionado: Buscar')
             if cliente.get_by_id(self.tb_id.value) == 200:
                 self.textbox_row.value = ""
                 self.tb_name.value = cliente.name.strip()
@@ -310,7 +407,21 @@ class TabContentSearch(ft.UserControl):
                 self.tb_email.read_only = False
                 self.button_update.disabled = False
                 self.button_delete.disabled = False
+                self.button_restart_fields.disabled = False
+                logging.info(
+                    f'''{date} - Cliente encontrado: 
+                        {cliente.name.strip()}
+                        {cliente.lastName.strip()}
+                        {cliente.address.strip()}
+                        {cliente.city.strip()}
+                        {cliente.zipCode.strip()}
+                        {str(cliente.dni).strip()}
+                        {cliente.phone.strip()}
+                        {cliente.email.strip()}
+                    '''
+                )
             else:
+                logging.info(f'{date} - Cliente NO encontrado')
                 self.textbox_row.value = f"""El cliente codigo {self.tb_id.value.strip()} NO PUDO SER ENCONTRADO"""
 
         self.update()

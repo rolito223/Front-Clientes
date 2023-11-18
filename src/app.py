@@ -1,11 +1,9 @@
 import flet as ft
 import logging
+from datetime import datetime
 
 from utils.create import TabContentCreate
 from utils.search import TabContentSearch
-
-
-logger = logging.log(logging.DEBUG, "/logs/mainmenu.log")
 
 
 def main(page: ft.Page):
@@ -29,7 +27,15 @@ def main(page: ft.Page):
     [PUT]/api/Clientes/{id} Actualiza un cliente
     [DELETE]/api/Clientes/{id} Elimina un cliente
     """
-    logging.info("Iniciando mainmenu.py")
+    logging.basicConfig(
+        format='%(levelname)s:%(message)s',
+        filename=f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log',
+        filemode='w',
+        level=logging.INFO
+    )
+
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    logging.info(f'[{date}] - Inicio de la aplicacion')
 
     # Encabezado de la aplicacion
 
@@ -52,6 +58,7 @@ def main(page: ft.Page):
     page.on_window_event = window_event
 
     def yes_click(e):
+        logging.info(f'[{date}] - Cierre de la aplicacion')
         page.window_destroy()
 
     def no_click(e):
@@ -69,14 +76,16 @@ def main(page: ft.Page):
         actions_alignment=ft.MainAxisAlignment.END,
     )
 
-    restart_button = ft.IconButton(
-        ft.icons.REFRESH,
-        icon_size=35,
-        tooltip="restart app",
-        on_click=lambda e: page.reload(),
-        style=ft.ButtonStyle(
-            color=ft.colors.WHITE,
-        ),
+    def on_exit_button_click(e):
+        page.dialog = confirm_dialog
+        confirm_dialog.open = True
+        page.update()
+
+    exit_button = ft.IconButton(
+        icon=ft.icons.EXIT_TO_APP,
+        icon_color=ft.colors.YELLOW_ACCENT,
+        on_click=lambda e: on_exit_button_click(e),
+        tooltip="Salir"
     )
 
     page.appbar = ft.AppBar(
@@ -87,14 +96,14 @@ def main(page: ft.Page):
         ),
         center_title=True,
         bgcolor="blue",
-        actions=[restart_button],
+        actions=[exit_button],
         leading_width=40,
         leading=ft.IconButton(
             icon=ft.icons.CODE,
             icon_color=ft.colors.YELLOW_ACCENT,
             on_click=lambda e: page.launch_url(
                 "https://github.com/rolito223/Front-Clientes"),
-            tooltip="View Code"
+            tooltip="Ir al repositorio"
         )
     )
 

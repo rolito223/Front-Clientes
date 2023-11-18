@@ -1,0 +1,36 @@
+INFO:[2023-11-17 23:40:37] - Inicio de la aplicacion
+INFO:2023-11-17 23:40:40 - Boton presionado: elevatedbutton {'style': '{"bgcolor":"blue500","animation_duration":500,"side":{"":{"w":3,"c":"black"},"hovered":{"w":1,"c":"black"}}}'}
+INFO:ID: 18
+INFO:2023-11-17 23:40:40 - Cliente NO encontrado
+INFO:2023-11-17 23:40:50 - Boton presionado: elevatedbutton {'style': '{"bgcolor":"blue500","animation_duration":500,"side":{"":{"w":3,"c":"black"},"hovered":{"w":1,"c":"black"}}}'}
+INFO:ID: 16
+INFO:2023-11-17 23:40:50 - Cliente encontrado: 
+                        Kiko
+                        Adsads
+                        12390
+                        Kjklc3123
+                        77777
+                        33202018
+                        23131
+                        1231@3231.com
+                    
+INFO:2023-11-17 23:41:40 - Boton presionado: elevatedbutton {'disabled': False, 'style': '{"bgcolor":"blue500","animation_duration":500,"side":{"":{"w":3,"c":"black"},"hovered":{"w":1,"c":"black"}}}'}
+INFO:ID: 16
+INFO:2023-11-17 23:41:40 - Datos a actualizar: {"id": 16, "name": "Kiko", "lastName": "Quesadilla", "address": "Malecom 24 N1313", "city": "Txulapala", "zipCode": "2311", "dni": 31221133, "phone": "2312231231", "email": "1231@3231.com"}
+INFO:2023-11-17 23:41:40 - Cliente actualizado correctamente
+{"id": 16, "name": "Kiko", "lastName": "Quesadilla", "address": "Malecom 24 N1313", "city": "Txulapala", "zipCode": "2311", "dni": 31221133, "phone": "2312231231", "email": "1231@3231.com"}
+INFO:2023-11-17 23:41:49 - Boton presionado: elevatedbutton {'style': '{"bgcolor":"blue500","animation_duration":500,"side":{"":{"w":3,"c":"black"},"hovered":{"w":1,"c":"black"}}}'}
+INFO:ID: 16
+INFO:2023-11-17 23:41:49 - Cliente encontrado: 
+                        Kiko
+                        Quesadilla
+                        Malecom 24 N1313
+                        Txulapala
+                        2311
+                        31221133
+                        2312231231
+                        1231@3231.com
+                    
+INFO:2023-11-17 23:41:51 - Boton presionado: elevatedbutton {'disabled': False, 'style': '{"bgcolor":"yellow400","animation_duration":500,"side":{"":{"w":3,"c":"black"},"hovered":{"w":1,"c":"black"}}}'}
+INFO:ID: 16
+INFO:2023-11-17 23:41:51 - Cliente eliminado correctamente
