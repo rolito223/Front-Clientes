@@ -4,16 +4,23 @@ import json
 import logging
 from datetime import datetime
 
-from utils.models import Cliente
+from utils.api_cliente import Cliente
 
 
 class TabContentCreate(ft.UserControl):
+    """
+        Formulario de creacion de clientes
+    """
+
     def __init__(self):
+        """
+            Constructor de la clase TabContentCreate
+        """
         super().__init__()
         logging.basicConfig(
             format='%(levelname)s:%(message)s',
             filename=f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log',
-            filemode='w',
+            filemode='a',
             level=logging.INFO
         )
         self.title = "Crear Clientes"
@@ -133,7 +140,13 @@ class TabContentCreate(ft.UserControl):
             on_click=self.button_clicked
         )
 
-    def build(self):
+    def build(self) -> ft.Control:
+        """
+            Construye el formulario de creacion de clientes
+        Returns:
+            ft.Control: Formulario de creacion de clientes
+        """
+
         fields = ft.Column(
             controls=[
                 ft.Divider(height=10, color='#212121'),
@@ -194,19 +207,36 @@ class TabContentCreate(ft.UserControl):
             )
         )
 
-    def blank_error(self, e):
-        # Reseteal el campo de ayuda
+    def blank_error(self, e: ft.ControlEvent) -> None:
+        """
+            Reseteal la propiedad counter_text y counter_style
+        de los campos de texto
+        Args:
+            e (ft.ControlEvent): Evento change de los campos de texto
+        """
         e.control.counter_text = ""
         e.control.counter_style = None
         e.control.update()
 
-    def is_blank(self):
-        # Chequea si hay campos vacios
+    def is_blank(self) -> bool:
+        """
+            Chequea si hay campos vacios en el formulario
+
+        Returns:
+            bool: True si hay campos vacios, False caso contrario
+        """
         if self.tb_address.value == "" or self.tb_city.value == "" or self.tb_dni.value == "" or self.tb_email.value == "" or self.tb_lastName.value == "" or self.tb_name.value == "" or self.tb_phone.value == "" or self.tb_zipcode.value == "":
             return True
 
-    def check_email(self, email: str):
-        # Chequea si el email es valido
+    def check_email(self, email: str) -> bool:
+        """
+            Chequea si el email es valido
+        Args:
+            email (str): Email a validar
+        Returns:
+            bool: True si el email es invalido, False caso contrario
+        """
+
         if len(email) < 8 or email.find("@") == -1 or email.find(".") == -1:
             return True
 
@@ -226,11 +256,17 @@ class TabContentCreate(ft.UserControl):
 
         return False
 
-    def validate_phone(self, phone: str):
+    def validate_phone(self, phone: str) -> bool:
         """
-        Valida el formato correcto de un numero de telefono
+            Valida el formato correcto de un numero de telefono
         Maximo 12 digitos - Minimo 10 digitos
         Debe contener solo numeros
+
+        Args:
+            phone (str): Numero de telefono a validar
+
+        Returns:
+            bool: True si el numero de telefono es invalido, False caso contrario
         """
 
         if (len(phone) >= 10) and (len(phone) <= 13) and (phone.isnumeric()):
@@ -238,7 +274,10 @@ class TabContentCreate(ft.UserControl):
         else:
             return True
 
-    def limpiar_datos(self):
+    def limpiar_datos(self) -> None:
+        """
+            Limpia los campos de texto del formulario
+        """
         self.tb_name.value = ""
         self.tb_lastName.value = ""
         self.tb_address.value = ""
@@ -248,15 +287,25 @@ class TabContentCreate(ft.UserControl):
         self.tb_phone.value = ""
         self.tb_email.value = ""
 
-    def button_clicked(self, e: ft.ControlEvent):
+    def button_clicked(self, e: ft.ControlEvent) -> None:
         """
-        Maneja el evento click del boton submit
-        Se encarga de validar los campos y enviar los datos a la api
-        Si la respuesta es 201, el cliente fue creado con exito
-        Caso contrario, se muestra un mensaje de error
+            Maneja el evento click del boton button_submit:
+                Se encarga de validar los campos y enviar los datos a la api.
+                Si algun campo esta vacio, se muestra un mensaje de error en
+                el textbox_row.
+                Si algun campo no cumple con el formato requerido, se muestra un
+                mensaje de error en el textbox_row y en el campo correspondiente.
+
+                Si la respuesta dela api es 201, el cliente fue creado con exito y se
+                muestra un mensaje de exito en el textbox_row con el nombre y apellido 
+                del cliente y su id.
+                Caso contrario, se muestra un mensaje de error en el textbox_row.
+        Args:
+            e (ft.ControlEvent): Evento click del boton submit
         """
+
         date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        logging.info(f'{date} - Boton presionado: Guardar')
+        logging.info(f'[{date} (Create)] - Boton presionado: Guardar')
         if self.is_blank():
             self.textbox_row.value = "No puede haber campos vacios"
             self.textbox_row.color = ft.colors.RED
@@ -281,8 +330,9 @@ class TabContentCreate(ft.UserControl):
                 self.tb_phone.counter_style = ft.TextStyle(color=ft.colors.RED)
 
             else:
-                logging.info(f'{date} - Datos validados correctamente')
-                logging.info(f'{date} - Enviando datos a la api')
+                logging.info(
+                    f'[{date} (Create)] - Datos validados correctamente')
+                logging.info(f'[{date} (Create)] - Enviando datos a la api')
                 cliente = Cliente()
 
                 data = json.dumps({
@@ -295,14 +345,16 @@ class TabContentCreate(ft.UserControl):
                     "phone": self.tb_phone.value,
                     "email": self.tb_email.value
                 })
-                logging.info(f'{date} - Datos enviados: {data}')
+                logging.info(f'[{date} (Create)] - Datos enviados: {data}')
                 if cliente.create(data) == 201:
                     self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} (ID: {cliente.id}) ha sido creado con exito"""
-                    logging.info(f'{date} - Cliente creado con exito')
+                    logging.info(
+                        f'[{date} (Create)] - Cliente creado con exito')
                     self.limpiar_datos()
 
                 else:
-                    logging.info(f'{date} - Error al crear el cliente')
+                    logging.info(
+                        f'[{date} (Create)] - Error al crear el cliente')
                     self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} NO PUDO SER CREADO"""
                     self.textbox_row.color = ft.colors.RED
 

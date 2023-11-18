@@ -7,35 +7,70 @@ from utils.search import TabContentSearch
 
 
 def main(page: ft.Page):
-    """Menu main de la aplicacion
-    Los campos que manejan los endpoints son:
-    {
-        "id": 0,
-        "name": "string",
-        "lastName": "string",
-        "address": "string",
-        "city": "string",
-        "zipCode": "string",
-        "dni": 0,
-        "phone": "string",
-        "email": "string"
-    }
-    Los endpoints de la api son:
-    [GET]/api/Clientes Obtiene todos los clientes
-    [GET]/api/Clientes/{id} Obtiene un cliente por id
-    [POST]/api/Clientes Crea un nuevo cliente
-    [PUT]/api/Clientes/{id} Actualiza un cliente
-    [DELETE]/api/Clientes/{id} Elimina un cliente
+    """
+        Renderiza la aplicacion y maneja los eventos de la misma.
+    Librerias:
+        Se utiliza la libreria flet para renderizar la aplicacion.
+        El backend de la aplicacion es una api rest desarrollada en .net core.
+        Se utiliza la libreria requests para realizar las peticiones a la api.
+        Se utiliza la libreria logging para guardar los logs de la aplicacion.
+        Se utiliza la libreria datetime para el manejo de fechas.
+
+    Eventos:
+        El evento on_window_event se utiliza para agregar una confirmacion 
+        al salir de la aplicacion.
+
+        El evento on_exit_button_click se utiliza para agregar una confirmacion al presionar
+        el boton exit_button (Solo version de escritorio y mobile).
+
+        El evento yes_click del boton de confirmacion se utiliza para cerrar la aplicacion.
+
+        El evento no_click del boton de confirmacion se utiliza para cerrar el dialogo de confirmacion.
+
+        El evento on_click del boton de github se utiliza para abrir el repositorio
+        en el navegador.
+
+    Vistas:
+        TabContentCreate: Vista para el tab de alta de clientes.
+
+        TabContentSearch: Vista para el tab de busqueda de clientes.
+
+        Por defecto se muestra la pestaña TabContentSearch.
+
+        Appbar: Encabezado de la aplicacion con el titulo, el acceso al repositorio y
+        el boton de salir(Solo version de escritorio y mobile).
+
+    Endpoints:
+
+        Los campos que manejan los endpoints son:
+        {
+            "id": 0,
+            "name": "string",
+            "lastName": "string",
+            "address": "string",
+            "city": "string",
+            "zipCode": "string",
+            "dni": 0,
+            "phone": "string",
+            "email": "string"
+        }
+        Los endpoints de la api son:
+        [GET]/api/Clientes Obtiene todos los clientes
+        [GET]/api/Clientes/{id} Obtiene un cliente por id
+        [POST]/api/Clientes Crea un nuevo cliente
+        [PUT]/api/Clientes/{id} Actualiza un cliente
+        [DELETE]/api/Clientes/{id} Elimina un cliente
+
     """
     logging.basicConfig(
         format='%(levelname)s:%(message)s',
         filename=f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log',
-        filemode='w',
+        filemode='a',
         level=logging.INFO
     )
 
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    logging.info(f'[{date}] - Inicio de la aplicacion')
+    logging.info(f'[{date} (Main)] - Inicio de la aplicacion')
 
     # Encabezado de la aplicacion
 
@@ -58,7 +93,7 @@ def main(page: ft.Page):
     page.on_window_event = window_event
 
     def yes_click(e):
-        logging.info(f'[{date}] - Cierre de la aplicacion')
+        logging.info(f'[{date} (Main)] - Cierre de la aplicacion')
         page.window_destroy()
 
     def no_click(e):
@@ -136,6 +171,6 @@ def main(page: ft.Page):
 ft.app(
     target=main,
     route_url_strategy="path",
-    # view=ft.WEB_BROWSER,
+    # view=ft.WEB_BROWSER,  # Permite abrir la aplicacion en el navegador
     assets_dir="assets"
 )

@@ -1,19 +1,26 @@
-from time import sleep
-import flet as ft
+import json
+from utils.models import Cliente
 
+if __name__ == '__main__':
+    print('Iniciando testeo de la clase Cliente')
+    cliente = Cliente()
 
-def main(page: ft.Page):
-    def button_click(e):
-        page.splash = ft.ProgressBar()
-        btn.disabled = True
-        page.update()
-        sleep(3)
-        page.splash = None
-        btn.disabled = False
-        page.update()
+    data = json.dumps({
+        "id": 5,
+        "name": "Roberto2",
+        "lastName": "Corintios3",
+        "address": "Manuel 123",
+        "city": "Pensylvania",
+        "zipCode": "1234",
+        "dni": 12345678,
+        "phone": "12345678",
+        "email": "roberto.corintios@pensylvania.com"
+    })
+    print(cliente.create(data))
+    print(cliente.update("5", data))
+    print(cliente.get_by_id(5))
+    print(cliente.delete(5))
+    print(cliente.get_by_id(7))
+    print(cliente.name)
 
-    btn = ft.ElevatedButton("Do some lengthy task!", on_click=button_click)
-    page.add(btn)
-
-
-ft.app(target=main)
+    print('Finalizando testeo de la clase Cliente')
