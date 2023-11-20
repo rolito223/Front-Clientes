@@ -29,6 +29,8 @@ import logging
 from datetime import datetime
 import os
 
+from decouple import config
+
 
 class Cliente():
     """ 
@@ -55,7 +57,7 @@ class Cliente():
         logging.info(
             f'[{date} (Api_Cliente)] - Creando instancia de la clase Cliente')
 
-        self.url = 'https://localhost:44356/api/Clientes'
+        self.url = config('APIURL')
         self.headers = {
             'Content-Type': 'application/json'
         }
