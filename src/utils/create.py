@@ -3,6 +3,7 @@ import flet as ft
 import json
 import logging
 from datetime import datetime
+import os
 
 from utils.api_cliente import Cliente
 
@@ -17,12 +18,6 @@ class TabContentCreate(ft.UserControl):
             Constructor de la clase TabContentCreate
         """
         super().__init__()
-        logging.basicConfig(
-            format='%(levelname)s:%(message)s',
-            filename=f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log',
-            filemode='a',
-            level=logging.INFO
-        )
         self.title = "Crear Clientes"
         self.description = "CRUD de clientes"
         self.language = "es"

@@ -1,6 +1,7 @@
 import flet as ft
 import logging
 from datetime import datetime
+import os
 
 from utils.create import TabContentCreate
 from utils.search import TabContentSearch
@@ -62,9 +63,16 @@ def main(page: ft.Page):
         [DELETE]/api/Clientes/{id} Elimina un cliente
 
     """
+    # Chequeo que exista el path, caso contrario lo creo
+    os.path.exists(
+        f'{os.path.abspath("logs")}'
+    ) or os.mkdir(
+        f'{os.path.abspath("logs")}'
+    )
+
     logging.basicConfig(
         format='%(levelname)s:%(message)s',
-        filename=f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log',
+        filename=f'{os.path.abspath("logs")}\{datetime.now().strftime("%Y-%m-%d")}.log',
         filemode='a',
         level=logging.INFO
     )

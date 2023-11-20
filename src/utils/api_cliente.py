@@ -27,6 +27,7 @@ import urllib3
 import json
 import logging
 from datetime import datetime
+import os
 
 
 class Cliente():
@@ -46,7 +47,7 @@ class Cliente():
 
         logging.basicConfig(
             format='%(levelname)s:%(message)s',
-            filename=f'./logs/{datetime.now().strftime("%Y-%m-%d")}.log',
+            filename=f'{os.path.abspath("logs")}\{datetime.now().strftime("%Y-%m-%d")}.log',
             filemode='a',
             level=logging.INFO
         )
