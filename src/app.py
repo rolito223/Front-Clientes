@@ -72,7 +72,7 @@ def main(page: ft.Page):
 
     logging.basicConfig(
         format='%(levelname)s:%(message)s',
-        filename=f'{os.path.abspath("logs")}\{datetime.now().strftime("%Y-%m-%d")}.log',
+        filename=f'{os.path.abspath("logs")}/{datetime.now().strftime("%Y-%m-%d")}.log',
         filemode='a',
         level=logging.INFO
     )
