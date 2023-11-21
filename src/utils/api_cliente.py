@@ -57,7 +57,7 @@ class Cliente():
         logging.info(
             f'[{date} (Api_Cliente)] - Creando instancia de la clase Cliente')
 
-        self.url = config('APIURL')
+        self.url = "https://192.168.3.200:44356/api/Clientes"
         self.headers = {
             'Content-Type': 'application/json'
         }

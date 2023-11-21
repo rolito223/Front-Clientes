@@ -179,6 +179,6 @@ def main(page: ft.Page):
 ft.app(
     target=main,
     route_url_strategy="path",
-    # view=ft.WEB_BROWSER,  # Permite abrir la aplicacion en el navegador
+    view=ft.WEB_BROWSER,  # Permite abrir la aplicacion en el navegador
     assets_dir="assets"
 )
