@@ -109,88 +109,30 @@ class TabContentSearch(ft.UserControl):
             on_change=self.blank_error
         )
 
-        self.button_search = ft.ElevatedButton(
-            content=ft.Row(
-                [
-                    ft.Icon(name=ft.icons.SEARCH_OUTLINED, color="BLACK87"),
-                    ft.Text(
-                        "Buscar",
-                        font_family="ARIAL",
-                        style=ft.TextThemeStyle.HEADLINE_SMALL,
-                        color=ft.colors.BLACK
-                    )
-                ],
-                alignment=ft.MainAxisAlignment.SPACE_AROUND,
-            ),
-
+        self.button_search = ft.FloatingActionButton(
+            icon=ft.icons.SEARCH_OUTLINED,
             bgcolor=ft.colors.BLUE_500,
-            style=ft.ButtonStyle(
-                side={
-                    ft.MaterialState.DEFAULT: ft.BorderSide(3, ft.colors.BLACK),
-                    ft.MaterialState.HOVERED: ft.BorderSide(1, ft.colors.BLACK),
-                },
-                elevation={"pressed": 0, "": 5},
-                animation_duration=500
-            ),
             on_click=self.button_clicked
         )
 
-        self.button_update = ft.ElevatedButton(
-            content=ft.Row(
-                [
-                    ft.Icon(name=ft.icons.UPDATE_OUTLINED, color="BLACK87"),
-                    ft.Text(
-                        "Actualizar",
-                        font_family="ARIAL",
-                        style=ft.TextThemeStyle.HEADLINE_SMALL,
-                        color=ft.colors.BLACK
-                    )
-                ],
-                alignment=ft.MainAxisAlignment.SPACE_AROUND,
-            ),
+        self.button_update = ft.FloatingActionButton(
+            icon=ft.icons.UPDATE_OUTLINED,
             disabled=True,
             bgcolor=ft.colors.BLUE_500,
-            style=ft.ButtonStyle(
-                side={
-                    ft.MaterialState.DEFAULT: ft.BorderSide(3, ft.colors.BLACK),
-                    ft.MaterialState.HOVERED: ft.BorderSide(1, ft.colors.BLACK),
-                },
-                elevation={"pressed": 0, "": 5},
-                animation_duration=500
-            ),
             on_click=self.button_clicked
         )
 
-        self.button_delete = ft.ElevatedButton(
-            content=ft.Row(
-                [
-                    ft.Icon(name=ft.icons.DELETE_OUTLINE, color="#FF3333"),
-                    ft.Text(
-                        "Eliminar",
-                        font_family="ARIAL",
-                        style=ft.TextThemeStyle.HEADLINE_SMALL,
-                        color=ft.colors.BLACK
-                    )
-                ],
-                alignment=ft.MainAxisAlignment.SPACE_AROUND,
-            ),
+        self.button_delete = ft.FloatingActionButton(
+            icon=ft.icons.DELETE_OUTLINE,
             disabled=True,
-            bgcolor=ft.colors.YELLOW_400,
-            style=ft.ButtonStyle(
-                side={
-                    ft.MaterialState.DEFAULT: ft.BorderSide(3, ft.colors.BLACK),
-                    ft.MaterialState.HOVERED: ft.BorderSide(1, ft.colors.BLACK),
-                },
-                elevation={"pressed": 0, "": 5},
-                animation_duration=500
-            ),
+            bgcolor=ft.colors.RED_500,
             on_click=self.button_clicked
         )
 
         self.button_restart_fields = ft.FloatingActionButton(
             icon=ft.icons.RESET_TV_OUTLINED,
             on_click=self.action_button_restart_fields,
-            bgcolor=ft.colors.RED_500,
+            bgcolor=ft.colors.YELLOW_400,
             disabled=True
         )
 
