@@ -5,6 +5,7 @@ import os
 
 from utils.create import TabContentCreate
 from utils.search import TabContentSearch
+from utils.listado import TabContentListar
 
 
 def main(page: ft.Page):
@@ -152,6 +153,7 @@ def main(page: ft.Page):
 
     create = TabContentCreate()
     search = TabContentSearch()
+    listado = TabContentListar()
 
     tabs = ft.Tabs(
         expand=True,
@@ -167,6 +169,11 @@ def main(page: ft.Page):
                 text="Alta",
                 content=create,
                 icon=ft.icons.CREATE_OUTLINED
+            ),
+            ft.Tab(
+                text="Listado",
+                content=listado,
+                icon=ft.icons.LIST_OUTLINED
             )
         ]
     )

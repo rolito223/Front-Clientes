@@ -4,6 +4,8 @@ import json
 import logging
 from datetime import datetime
 import os
+from threading import Thread
+from time import sleep
 
 from utils.api_cliente import Cliente
 
@@ -282,6 +284,15 @@ class TabContentCreate(ft.UserControl):
         self.tb_phone.value = ""
         self.tb_email.value = ""
 
+    def clear_textbox(self) -> None:
+        """
+            Limpia el contenido del textbox_row
+        """
+        sleep(10)
+        self.textbox_row.value = ""
+        self.textbox_row.color = ft.colors.WHITE
+        self.update()
+
     def button_clicked(self, e: ft.ControlEvent) -> None:
         """
             Maneja el evento click del boton button_submit:
@@ -346,11 +357,11 @@ class TabContentCreate(ft.UserControl):
                     logging.info(
                         f'[{date} (Create)] - Cliente creado con exito')
                     self.limpiar_datos()
-
                 else:
                     logging.info(
                         f'[{date} (Create)] - Error al crear el cliente')
                     self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} NO PUDO SER CREADO"""
                     self.textbox_row.color = ft.colors.RED
 
+        Thread(target=self.clear_textbox).start()
         self.update()

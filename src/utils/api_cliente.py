@@ -57,7 +57,8 @@ class Cliente():
         logging.info(
             f'[{date} (Api_Cliente)] - Creando instancia de la clase Cliente')
 
-        self.url = "https://192.168.3.200:44356/api/Clientes"
+        # self.url = "https://192.168.3.200:44356/api/Clientes"
+        self.url = config('APIURL')
         self.headers = {
             'Content-Type': 'application/json'
         }
@@ -97,16 +98,17 @@ class Cliente():
             self.status_code = self.response.status_code
 
             if self.status_code == 200:
-                self.data = self.json['data']
+                self.data = self.json
             logging.info(
                 f'''[{date} (Api_Cliente)] - GET /api/Clientes - {self.status_code}:
                 {self.response}
                 --------------------\n'''
             )
-            return self.json
+            return self.status_code
 
         except Exception as e:
             logging.error(f'[{date} (Api_Cliente)] - {e}')
+            self.status_code = 503
             return None
 
     def get_by_id(self, id: int) -> int:
