@@ -144,7 +144,7 @@ class TabContentListar(ft.UserControl):
         """
             Limpia el contenido del textbox_row
         """
-        sleep(10)
+        sleep(7)
         self.textbox_row.value = ""
         self.textbox_row.color = ft.colors.WHITE
         self.update()
@@ -230,6 +230,8 @@ class TabContentListar(ft.UserControl):
 
             logging.info(
                 f'[{date} (Search)] - Listado generado: {len(cliente.data)} clientes')
+            self.textbox_row.value = f'Listado generado: {len(cliente.data)} clientes'
+
         else:
             logging.info(f'[{date} (Search)] - Error al listar clientes')
             self.textbox_row.value = f'*** ERROR AL LISTAR CLIENTES ***'

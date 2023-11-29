@@ -278,7 +278,6 @@ class TabContentSearch(ft.UserControl):
         """
             Resetea los campos de texto
         """
-        self.textbox_row.value = ""
         self.tb_id.value = ""
         self.tb_name.value = ""
         self.tb_lastName.value = ""
@@ -303,7 +302,7 @@ class TabContentSearch(ft.UserControl):
         """
             Limpia el contenido del textbox_row
         """
-        sleep(10)
+        sleep(7)
         self.textbox_row.value = ""
         self.textbox_row.color = ft.colors.WHITE
         self.update()
@@ -457,5 +456,6 @@ class TabContentSearch(ft.UserControl):
                 logging.info(f'[{date} (Search)] - Cliente NO encontrado')
                 self.textbox_row.value = f"""El cliente codigo {self.tb_id.value.strip()} NO PUDO SER ENCONTRADO"""
                 self.textbox_row.color = ft.colors.RED
+
         Thread(target=self.clear_textbox).start()
         self.update()
