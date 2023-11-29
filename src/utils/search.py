@@ -4,6 +4,8 @@ import json
 import logging
 from datetime import datetime
 import os
+from threading import Thread
+from time import sleep
 
 from utils.api_cliente import Cliente
 
@@ -276,6 +278,7 @@ class TabContentSearch(ft.UserControl):
         """
             Resetea los campos de texto
         """
+        self.textbox_row.value = ""
         self.tb_id.value = ""
         self.tb_name.value = ""
         self.tb_lastName.value = ""
@@ -295,6 +298,15 @@ class TabContentSearch(ft.UserControl):
         self.tb_dni.read_only = True
         self.tb_phone.read_only = True
         self.tb_email.read_only = True
+
+    def clear_textbox(self) -> None:
+        """
+            Limpia el contenido del textbox_row
+        """
+        sleep(10)
+        self.textbox_row.value = ""
+        self.textbox_row.color = ft.colors.WHITE
+        self.update()
 
     def button_clicked(self, e: ft.ControlEvent) -> None:
         """
@@ -345,6 +357,7 @@ class TabContentSearch(ft.UserControl):
                 logging.info(
                     f'[{date} (Search)] - Cliente NO pudo ser eliminado')
                 self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} NO PUDO SER ELIMINADO"""
+                self.textbox_row.color = ft.colors.RED
 
         # Accion de button_update
         elif e.control == self.button_update:
@@ -401,6 +414,7 @@ class TabContentSearch(ft.UserControl):
                             f'[{date} (Search)] - Cliente NO pudo ser actualizado'
                         )
                         self.textbox_row.value = f"""El cliente {self.tb_name.value.strip()} {self.tb_lastName.value.strip()} NO PUDO SER ACTUALIZADO"""
+                        self.textbox_row.color = ft.colors.RED
 
         else:
             # Accion de button_search
@@ -442,5 +456,6 @@ class TabContentSearch(ft.UserControl):
             else:
                 logging.info(f'[{date} (Search)] - Cliente NO encontrado')
                 self.textbox_row.value = f"""El cliente codigo {self.tb_id.value.strip()} NO PUDO SER ENCONTRADO"""
-
+                self.textbox_row.color = ft.colors.RED
+        Thread(target=self.clear_textbox).start()
         self.update()
