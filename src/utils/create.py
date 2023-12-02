@@ -54,7 +54,8 @@ class TabContentCreate(ft.UserControl):
             capitalization=ft.TextCapitalization.WORDS,
             keyboard_type=ft.KeyboardType.NAME,
             hint_text="Ingrese su apellido",
-            bgcolor='#1a1c1e'
+            bgcolor='#1a1c1e',
+            max_length=40
         )
 
         self.tb_address = ft.TextField(
@@ -63,7 +64,8 @@ class TabContentCreate(ft.UserControl):
             capitalization=ft.TextCapitalization.WORDS,
             keyboard_type=ft.KeyboardType.STREET_ADDRESS,
             hint_text="Ingrese su domicilio",
-            bgcolor='#1a1c1e'
+            bgcolor='#1a1c1e',
+            max_length=40
         )
 
         self.tb_city = ft.TextField(
@@ -72,7 +74,8 @@ class TabContentCreate(ft.UserControl):
             capitalization=ft.TextCapitalization.WORDS,
             keyboard_type=ft.KeyboardType.NAME,
             hint_text="Ciudad de residencia",
-            bgcolor='#1a1c1e'
+            bgcolor='#1a1c1e',
+            max_length=40
         )
 
         self.tb_zipcode = ft.TextField(
@@ -81,7 +84,8 @@ class TabContentCreate(ft.UserControl):
             capitalization=ft.TextCapitalization.CHARACTERS,
             keyboard_type=ft.KeyboardType.TEXT,
             hint_text="Codigo postal",
-            bgcolor='#1a1c1e'
+            bgcolor='#1a1c1e',
+            max_length=10
         )
 
         self.tb_dni = ft.TextField(
@@ -90,7 +94,8 @@ class TabContentCreate(ft.UserControl):
             keyboard_type=ft.KeyboardType.NUMBER,
             hint_text="Ingrese su numero de DNI",
             bgcolor='#1a1c1e',
-            on_change=self.blank_error
+            on_change=self.blank_error,
+            max_length=8
         )
 
         self.tb_phone = ft.TextField(
@@ -99,7 +104,8 @@ class TabContentCreate(ft.UserControl):
             keyboard_type=ft.KeyboardType.PHONE,
             hint_text="Ingrese su numero de telefono",
             bgcolor='#1a1c1e',
-            on_change=self.blank_error
+            on_change=self.blank_error,
+            max_length=13
         )
 
         self.tb_email = ft.TextField(
@@ -108,7 +114,8 @@ class TabContentCreate(ft.UserControl):
             keyboard_type=ft.KeyboardType.EMAIL,
             hint_text="Ingrese su correo electronico",
             bgcolor='#1a1c1e',
-            on_change=self.blank_error
+            on_change=self.blank_error,
+            max_length=40
         )
 
         self.button_submit = ft.ElevatedButton(
@@ -323,8 +330,8 @@ class TabContentCreate(ft.UserControl):
                 self.tb_email.counter_text = "Ingrese un email valido"
                 self.tb_email.counter_style = ft.TextStyle(color=ft.colors.RED)
 
-            elif self.tb_dni.value.isnumeric() == False:
-                self.textbox_row.value = "El DNI debe ser un numero"
+            elif self.tb_dni.value.isnumeric() == False or len(self.tb_dni.value) > 8 or int(self.tb_dni.value) > 99999999:
+                self.textbox_row.value = "Formato de DNI erroneo, debe contener solo numeros y no mas de 8 digitos"
                 self.textbox_row.color = ft.colors.RED
                 self.tb_dni.counter_text = "Ingrese un DNI valido"
                 self.tb_dni.counter_style = ft.TextStyle(color=ft.colors.RED)

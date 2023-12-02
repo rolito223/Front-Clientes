@@ -44,7 +44,8 @@ class TabContentSearch(ft.UserControl):
             capitalization=ft.TextCapitalization.WORDS,
             keyboard_type=ft.KeyboardType.NAME,
             bgcolor='#1a1c1e',
-            read_only=True
+            read_only=True,
+            max_length=40
         )
 
         self.tb_lastName = ft.TextField(
@@ -53,7 +54,8 @@ class TabContentSearch(ft.UserControl):
             capitalization=ft.TextCapitalization.WORDS,
             keyboard_type=ft.KeyboardType.NAME,
             bgcolor='#1a1c1e',
-            read_only=True
+            read_only=True,
+            max_length=40
         )
 
         self.tb_address = ft.TextField(
@@ -62,7 +64,8 @@ class TabContentSearch(ft.UserControl):
             capitalization=ft.TextCapitalization.WORDS,
             keyboard_type=ft.KeyboardType.STREET_ADDRESS,
             bgcolor='#1a1c1e',
-            read_only=True
+            read_only=True,
+            max_length=40
         )
 
         self.tb_city = ft.TextField(
@@ -71,7 +74,8 @@ class TabContentSearch(ft.UserControl):
             capitalization=ft.TextCapitalization.WORDS,
             keyboard_type=ft.KeyboardType.NAME,
             bgcolor='#1a1c1e',
-            read_only=True
+            read_only=True,
+            max_length=40
         )
 
         self.tb_zipcode = ft.TextField(
@@ -80,7 +84,8 @@ class TabContentSearch(ft.UserControl):
             capitalization=ft.TextCapitalization.CHARACTERS,
             keyboard_type=ft.KeyboardType.TEXT,
             bgcolor='#1a1c1e',
-            read_only=True
+            read_only=True,
+            max_length=10
         )
 
         self.tb_dni = ft.TextField(
@@ -90,7 +95,8 @@ class TabContentSearch(ft.UserControl):
             keyboard_type=ft.KeyboardType.NUMBER,
             bgcolor='#1a1c1e',
             read_only=True,
-            on_change=self.blank_error
+            on_change=self.blank_error,
+            max_length=8
         )
 
         self.tb_phone = ft.TextField(
@@ -99,7 +105,8 @@ class TabContentSearch(ft.UserControl):
             keyboard_type=ft.KeyboardType.PHONE,
             bgcolor='#1a1c1e',
             read_only=True,
-            on_change=self.blank_error
+            on_change=self.blank_error,
+            max_length=13
         )
 
         self.tb_email = ft.TextField(
@@ -108,7 +115,8 @@ class TabContentSearch(ft.UserControl):
             keyboard_type=ft.KeyboardType.EMAIL,
             bgcolor='#1a1c1e',
             read_only=True,
-            on_change=self.blank_error
+            on_change=self.blank_error,
+            max_length=40
         )
 
         self.button_search = ft.FloatingActionButton(
@@ -120,7 +128,7 @@ class TabContentSearch(ft.UserControl):
         self.button_update = ft.FloatingActionButton(
             icon=ft.icons.UPDATE_OUTLINED,
             disabled=True,
-            bgcolor=ft.colors.BLUE_500,
+            bgcolor=ft.colors.GREEN_500,
             on_click=self.button_clicked
         )
 
@@ -134,7 +142,7 @@ class TabContentSearch(ft.UserControl):
         self.button_restart_fields = ft.FloatingActionButton(
             icon=ft.icons.RESET_TV_OUTLINED,
             on_click=self.action_button_restart_fields,
-            bgcolor=ft.colors.YELLOW_400,
+            bgcolor=ft.colors.ORANGE_500,
             disabled=True
         )
 
@@ -373,8 +381,8 @@ class TabContentSearch(ft.UserControl):
                     self.tb_email.counter_style = ft.TextStyle(
                         color=ft.colors.RED)
 
-                elif self.tb_dni.value.isnumeric() == False:
-                    self.textbox_row.value = "El DNI debe ser un numero"
+                elif self.tb_dni.value.isnumeric() == False or len(self.tb_dni.value) > 8 or int(self.tb_dni.value) > 99999999:
+                    self.textbox_row.value = "Formato de DNI erroneo, debe contener solo numeros y no mas de 8 digitos"
                     self.textbox_row.color = ft.colors.RED
                     self.tb_dni.counter_text = "Ingrese un DNI valido"
                     self.tb_dni.counter_style = ft.TextStyle(
